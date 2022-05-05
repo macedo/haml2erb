@@ -4,7 +4,9 @@ haml2erb
 Usage
 -----
 
-`haml2erb [<path>]`
+```
+Usage: haml2erb [<path>]
+```
 
 
 License

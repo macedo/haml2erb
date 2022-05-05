@@ -14,7 +14,8 @@ import (
 )
 
 var (
-	ErrNoFiles = errors.New("no files found")
+	ErrNoFiles  = errors.New("no files found")
+	removeFiles = false
 )
 
 func main() {
@@ -22,6 +23,14 @@ func main() {
 		fmt.Println("Usage: haml2erb [<path>]")
 		flag.PrintDefaults()
 		os.Exit(1)
+	}
+
+	var answer string
+	fmt.Fprintln(os.Stdout, "remove converted files? (y/n)")
+	fmt.Scanln(&answer)
+
+	if answer == "y" {
+		removeFiles = true
 	}
 
 	if err := run(os.Args[1], os.Stdout); err != nil {
@@ -92,7 +101,6 @@ func run(root string, out io.Writer) error {
 					continue
 
 				}
-
 				fmt.Fprintf(out, "converting file %s [OK]\n", f)
 
 				fname := strings.ReplaceAll(f, ".haml", ".erb")
@@ -100,8 +108,15 @@ func run(root string, out io.Writer) error {
 					fmt.Fprintf(out, "writing file %s: %s [ERROR]\n", fname, err)
 					continue
 				}
-
 				fmt.Fprintf(out, "writing file %s [OK]\n", fname)
+
+				if removeFiles {
+					if err := os.Remove(f); err != nil {
+						fmt.Fprintf(out, "removing file %s: %s [ERROR]\n", f, err)
+						continue
+					}
+					fmt.Fprintf(out, "removing file %s [OK]\n", f)
+				}
 			}
 		}()
 	}
