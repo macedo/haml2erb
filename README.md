@@ -1,16 +1,17 @@
-haml2erb
-========
+# haml2erb
 
-Usage
------
+
+## Usage
+
 
 ```
 Usage: haml2erb [<path>]
 ```
 
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-License
--------
+## License
 
 
 [“THE BEER-WARE LICENSE”](http://en.wikipedia.org/wiki/Beerware):
