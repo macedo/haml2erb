@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"regexp"
 )
 
 const (
@@ -45,6 +46,14 @@ func haml2erb(haml string) (string, error) {
 	}
 
 	if data.Success {
+		matched, err := regexp.Match(`unexpected`, []byte(data.ERB))
+		if err != nil {
+			return "", err
+		}
+
+		if matched {
+			return "", &ErrUnprocessableEntity{error: data.ERB}
+		}
 		return data.ERB, nil
 	}
 
